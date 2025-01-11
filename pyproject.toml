@@ -1,0 +1,36 @@
+[project]
+authors = [{name = "c1au6i0", email = "claudio.zanettini@gmail.com"}]
+description = "Extract toxicological and chemical information from databases maintained by scientific agencies."
+name = "extractoxpy"
+requires-python = ">= 3.11"
+version = "0.0.0.9000"
+readme = "README.md"
+license = "MIT"
+license-file = "LICENSE.md"
+dependencies = [
+  "requests>=2.32.3,<3.0.0"
+, "black>=24.10.0,<25", "pybadges>=3.0.1,<4"]
+
+[project.urls]
+Documentation = "https://github.com/c1au6i0/extractoxpy#readme"
+Issues = "https://github.com/c1au6i0/extractoxpy/issues"
+Source = "https://github.com/c1au6i0/extractoxpy"
+
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["osx-64"]
+
+[tool.pixi.pypi-dependencies]
+extractoxpy = { path = ".", editable = true }
+
+[tool.pixi.tasks]
+
+[tool.pixi.dependencies]
+requests = ">=2.32.3,<3"
+
+
+
