@@ -2,4 +2,3 @@
 #
 # SPDX-License-Identifier: MIT
 from .random_function import get_random_number
-

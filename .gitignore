@@ -52,3 +52,7 @@ share/python-wheels/
 .history/
 tmp/
 temp/
+
+# pixi environments
+.pixi
+*.egg-info
