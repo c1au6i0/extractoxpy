@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2025-present c1au6i0 <claudio.zanettini@gmail.com>
 #
 # SPDX-License-Identifier: MIT
+# from extractoxpy import checks
 
 # Taken from pandas -----
 # Let users know if they're missing any of our hard dependencies
@@ -19,6 +20,13 @@ if _missing_dependencies:  # pragma: no cover
     )
 del _hard_dependencies, _dependency, _missing_dependencies
 
+
+from extractoxpy.checks.internet import (
+     is_online,
+     check_internet
+)
+
+from .extr_ice import extr_ice
 
 # from pandas._config import (
 #    get_option,

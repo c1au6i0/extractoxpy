@@ -3,6 +3,11 @@ from rich.console import Console
 
 console = Console()
 
+class NoInternetConnectionError(Exception):
+    """Raised when there is no internet connection."""
+    pass
+
+
 def is_online(url='http://www.google.com', timeout=5):
     """
     Check if the internet is accessible by making a HEAD request.
@@ -32,8 +37,7 @@ def check_internet(verbose=True):
     if verbose:
         console.print("Checking Internet Connection...")
     if not is_online():
-        console.print("It seems that you are not connected to the internet!", style="bold red")
-        return False
+        raise NoInternetConnectionError("It seems that you are not connected to the internet!")
     else:
         if verbose:
             console.print("Internet connection OK...", style="green")
