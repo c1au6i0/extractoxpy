@@ -5,6 +5,9 @@
 
 # Taken from pandas -----
 # Let users know if they're missing any of our hard dependencies
+from .extr_ice import extr_ice as extr_ice
+from extractoxpy.checks.internet import check_internet as check_internet 
+
 _hard_dependencies = ("requests", "rich", "pandas")
 _missing_dependencies = []
 
@@ -19,14 +22,6 @@ if _missing_dependencies:  # pragma: no cover
         "Unable to import required dependencies:\n" + "\n".join(_missing_dependencies)
     )
 del _hard_dependencies, _dependency, _missing_dependencies
-
-
-from extractoxpy.checks.internet import (
-     is_online,
-     check_internet
-)
-
-from .extr_ice import extr_ice
 
 # from pandas._config import (
 #    get_option,
