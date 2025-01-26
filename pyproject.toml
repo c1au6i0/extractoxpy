@@ -43,6 +43,7 @@ ipykernel = ">=6.29.5,<7"
 imp = ">=2.22.0,<3"
 numpy = ">=2.2.2,<3"
 tabloo = ">=0.1.0,<0.2"
+pytest = ">=8.3.4,<9"
 
 [dependency-groups]
 test = ["pytest"]

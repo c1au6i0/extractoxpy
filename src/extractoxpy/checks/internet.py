@@ -3,12 +3,14 @@ from rich.console import Console
 
 console = Console()
 
+
 class NoInternetConnectionError(Exception):
     """Raised when there is no internet connection."""
+
     pass
 
 
-def is_online(url='http://www.google.com', timeout=5):
+def is_online(url="http://www.google.com", timeout=5):
     """
     Check if the internet is accessible by making a HEAD request.
 
@@ -27,6 +29,7 @@ def is_online(url='http://www.google.com', timeout=5):
     except requests.Timeout:
         return False
 
+
 def check_internet(verbose=True):
     """
     Check internet connection with verbose messaging.
@@ -37,9 +40,10 @@ def check_internet(verbose=True):
     if verbose:
         console.print("Checking Internet Connection...")
     if not is_online():
-        raise NoInternetConnectionError("It seems that you are not connected to the internet!")
+        raise NoInternetConnectionError(
+            "It seems that you are not connected to the internet!"
+        )
     else:
         if verbose:
             console.print("Internet connection OK...", style="green")
         return True
-

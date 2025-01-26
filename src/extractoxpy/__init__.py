@@ -6,7 +6,7 @@
 # Taken from pandas -----
 # Let users know if they're missing any of our hard dependencies
 from .extr_ice import extr_ice as extr_ice
-from extractoxpy.checks.internet import check_internet as check_internet 
+from extractoxpy.checks.internet import check_internet as check_internet
 
 _hard_dependencies = ("requests", "rich", "pandas")
 _missing_dependencies = []

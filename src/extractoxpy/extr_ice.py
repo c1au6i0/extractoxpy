@@ -7,12 +7,13 @@ from .checks.internet import check_internet
 
 console = Console()
 
+
 def extr_ice(
     casrn: List[str],
     assays: Optional[List[str]] = None,
     verify_ssl: bool = False,
     verbose: bool = True,
-    **kwargs
+    **kwargs,
 ) -> pd.DataFrame:
     """
     Extract Data from NTP ICE Database.
@@ -45,22 +46,21 @@ def extr_ice(
 
     base_url = "https://ice.ntp.niehs.nih.gov/api/v1/search"
 
-    
     if not isinstance(casrn, list):
         casrn = [casrn]
-    
+
     if assays is not None and not isinstance(assays, list):
         assays = [assays]
-  
-    payload = {"chemids": casrn, "assays": assays} 
-    
+
+    payload = {"chemids": casrn, "assays": assays}
+
     try:
         response = requests.post(url=base_url, json=payload)
     except requests.exceptions.ConnectionError as e:
-    # Check if the internet connection is available
+        # Check if the internet connection is available
         check_internet()
         print(f"Connection Error:\n{e}")
-        raise 
+        raise
     except requests.exceptions.Timeout as e:
         check_internet()
         print(f"Timeout occurred:\n {e}")
@@ -69,36 +69,54 @@ def extr_ice(
         print(f"Request Exception occurred:\n {e}")
         raise
 
-    
-    response.raise_for_status()
-
-    dat = response.json()
-
-    dat_cl = pd.DataFrame(dat['endPoints'])
-
-
+    # the bella ciao case goes that if nothing it is retrieved an exception is raised.
+    # that is not good
     col_names = [
-        "assay", "endpoint", "substance_type", "casrn", "qsar_ready_id",
-        "value", "unit", "species", "receptor_species", "route", "sex",
-        "strain", "life_stage", "tissue", "lesion", "location",
-        "assay_source", "in_vitro_assay_format", "reference",
-        "reference_url", "dtxsid", "substance_name", "pubmed_id"
+        "assay",
+        "endpoint",
+        "substance_type",
+        "casrn",
+        "qsar_ready_id",
+        "value",
+        "unit",
+        "species",
+        "receptor_species",
+        "route",
+        "sex",
+        "strain",
+        "life_stage",
+        "tissue",
+        "lesion",
+        "location",
+        "assay_source",
+        "in_vitro_assay_format",
+        "reference",
+        "reference_url",
+        "dtxsid",
+        "substance_name",
+        "pubmed_id",
     ]
 
-    dat_cl.columns = col_names
-    
-    casrn_array = np.array(casrn)
-    ids_not_found = casrn_array[~np.isin(casrn_array,dat_cl["casrn"])] 
-    # ids_not_found = [item for item in casrn if item not in dat_cl["casrn"].values]
+    if "CASRN not found or no results found" in response.text:
+        dat_cl = pd.DataFrame(columns=col_names)
+    else:
+        dat = response.json()
+        dat_cl = pd.DataFrame(dat["endPoints"])
+        dat_cl.columns = col_names
 
+    casrn_array = np.array(casrn)
+    ids_not_found = casrn_array[~np.isin(casrn_array, dat_cl["casrn"])]
+    # ids_not_found = [item for item in casrn if item not in dat_cl["casrn"].values]
+    # ids_found = casrn_array[np.isin(casrn_array, dat_cl["casrn"])]
+    
     out = dat_cl.copy()
-    out["query"] = out["casrn"] 
+    out["query"] = out["casrn"]
 
     if len(ids_not_found) > 0:
-         dat_not_found = pd.DataFrame(columns=col_names)
-         dat_not_found["query"] =  ids_not_found
-         out = pd.concat([out, dat_not_found], axis=0, ignore_index=True)
-         if verbose: 
-             print(f"CASRN {ids_not_found} not found.")
-             
+        dat_not_found = pd.DataFrame(columns=col_names)
+        dat_not_found["query"] = ids_not_found
+        out = pd.concat([out, dat_not_found], axis=0, ignore_index=True)
+        if verbose:
+            print(f"CASRN {ids_not_found} not found.")
+
     return out
